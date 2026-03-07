@@ -38,7 +38,8 @@ export default function Footer() {
                 </div>
 
                 <div className="border-t border-white/5 pt-6 text-center text-xs text-gray-500">
-                    &copy; {new Date().getFullYear()} Mama Ko Sekuwa. All rights reserved.
+                    &copy; {new Date().getFullYear()} Mama Ko Sekuwa.
+                    BY Sagun Giri.
                 </div>
             </div>
         </footer>
