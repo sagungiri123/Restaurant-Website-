@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-/* Verify JWT token from Authorization header */
+/* ── protect — verify JWT access token ───────────────────── */
 const protect = async (req, res, next) => {
     try {
         const header = req.headers.authorization;
@@ -19,16 +19,29 @@ const protect = async (req, res, next) => {
 
         next();
     } catch (err) {
+        // Distinguish expired vs invalid so the frontend can auto-refresh
+        if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({ success: false, message: 'Token expired', tokenExpired: true });
+        }
         return res.status(401).json({ success: false, message: 'Token invalid' });
     }
 };
 
-/* Ensure user has admin role */
-const isAdmin = (req, res, next) => {
-    if (req.user && req.user.role === 'admin') {
-        return next();
-    }
-    return res.status(403).json({ success: false, message: 'Admin access required' });
+/* ── authorize — role-based access control ───────────────── */
+/**
+ * Usage: authorize('admin')  or  authorize('admin', 'user')
+ * Must be used AFTER protect middleware (req.user must exist)
+ */
+const authorize = (...roles) => {
+    return (req, res, next) => {
+        if (!req.user || !roles.includes(req.user.role)) {
+            return res.status(403).json({
+                success: false,
+                message: `Access denied. Required role: ${roles.join(' or ')}`,
+            });
+        }
+        next();
+    };
 };
 
-module.exports = { protect, isAdmin };
+module.exports = { protect, authorize };

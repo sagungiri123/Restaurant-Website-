@@ -2,7 +2,7 @@ const router = require('express').Router();
 const rateLimit = require('express-rate-limit');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
-const { protect, isAdmin } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const { createOrder, getOrders, updateOrderStatus } = require('../controllers/orderController');
 
 // 10 orders per hour per IP
@@ -29,12 +29,12 @@ router.post(
     createOrder
 );
 
-router.get('/', protect, isAdmin, getOrders);
+router.get('/', protect, authorize('admin'), getOrders);
 
 router.put(
     '/:id',
     protect,
-    isAdmin,
+    authorize('admin'),
     validate([
         body('status').isIn(['Pending', 'Preparing', 'Completed', 'Cancelled']).withMessage('Invalid status'),
     ]),

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -44,6 +44,13 @@ export default function Login() {
                     <button type="submit" disabled={loading} className="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-3.5 rounded-xl transition-colors disabled:opacity-50">
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
+
+                    <p className="text-center text-gray-400 text-sm">
+                        Don't have an account?{' '}
+                        <Link to="/register" className="text-brand-400 hover:text-brand-300 transition-colors font-medium">
+                            Create one
+                        </Link>
+                    </p>
                 </form>
             </div>
         </div>

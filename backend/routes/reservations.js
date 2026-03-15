@@ -2,7 +2,7 @@ const router = require('express').Router();
 const rateLimit = require('express-rate-limit');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
-const { protect, isAdmin } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const { createReservation, getReservations } = require('../controllers/reservationController');
 
 // 5 reservations per hour per IP
@@ -25,6 +25,6 @@ router.post(
     createReservation
 );
 
-router.get('/', protect, isAdmin, getReservations);
+router.get('/', protect, authorize('admin'), getReservations);
 
 module.exports = router;

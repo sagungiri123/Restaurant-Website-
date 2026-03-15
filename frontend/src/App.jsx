@@ -16,6 +16,7 @@ import Reservation from './pages/Reservation';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
+import Register from './pages/Register';
 
 // Admin pages
 import Login from './pages/admin/Login';
@@ -50,6 +51,7 @@ export default function App() {
                         <Route path="/cart" element={<Cart />} />
                         <Route path="/checkout" element={<Checkout />} />
                         <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                        <Route path="/register" element={<Register />} />
                     </Route>
 
                     {/* Admin routes */}
@@ -57,7 +59,7 @@ export default function App() {
                     <Route
                         path="/admin"
                         element={
-                            <ProtectedRoute>
+                            <ProtectedRoute requiredRole="admin">
                                 <AdminLayout />
                             </ProtectedRoute>
                         }

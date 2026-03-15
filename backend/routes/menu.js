@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
-const { protect, isAdmin } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const {
     getMenuItems,
     getMenuItem,
@@ -22,8 +22,8 @@ const menuValidation = validate([
     body('price').isFloat({ min: 0 }).withMessage('Price must be a positive number'),
 ]);
 
-router.post('/', protect, isAdmin, menuValidation, createMenuItem);
-router.put('/:id', protect, isAdmin, updateMenuItem);
-router.delete('/:id', protect, isAdmin, deleteMenuItem);
+router.post('/', protect, authorize('admin'), menuValidation, createMenuItem);
+router.put('/:id', protect, authorize('admin'), updateMenuItem);
+router.delete('/:id', protect, authorize('admin'), deleteMenuItem);
 
 module.exports = router;
